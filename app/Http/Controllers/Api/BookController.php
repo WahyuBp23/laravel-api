@@ -9,8 +9,17 @@ use Illuminate\Http\Request;
 class BookController extends Controller
 {
     public function show($id) {
-    $data = Book::with('authors')->find($id);
+    $data = Book::with('authors', 'genres')->find($id);
     return response()->json($data);
 }
+    public function store(Request $request){
+        $validatedData = $request -> validate([
+            'title' => 'required|max:255',
+            'published_year' => 'required',
+        ]);
+
+        $post = Book::create([$validatedData]);
+        return response()->json($post, 201);
+    }
 
 }
